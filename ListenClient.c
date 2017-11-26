@@ -45,7 +45,7 @@ static void print_formatted_message(struct string* message) //print message in a
 
 
 	message->length += 8;		//8 bits of time
-	int64_t time = *message->data;
+	int64_t time = *(int64_t*)message->data;
 	strftime(timestamp, 200, "%d-%m-%Y %H:%M:%S", localtime((time_t*)&time));
 	message->length += 1; 		//'>'
 	copy_until_delimiter_offset(message,&servername,'@');
