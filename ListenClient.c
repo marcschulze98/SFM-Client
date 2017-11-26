@@ -41,10 +41,7 @@ static void print_formatted_message(struct string* message) //print message in a
 	struct string username = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH };
 	char* timestamp = malloc(200);
 	struct string temp_message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH };
-
-	printf("(DEBUG) INCOMING MESSAGE: %ld%s\n", *(int64_t*)message->data, message->data+8);
 	message->length = 0;
-
 
 	message->length += 8;		//8 bits of time
 	int64_t time = *(int64_t*)message->data;

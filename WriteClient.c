@@ -23,6 +23,7 @@ void send_message(int* socket_fd_pointer)		//read input into different buffers, 
 	struct string username = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH};
 	struct string message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH};
 	struct pollfd stdin_ready = { .fd = fileno(stdin), .events = POLLIN, .revents = 0};
+	struct return_info return_codes;
 
 	printf("Zielserver eingeben: ");
 	fflush(stdout);
@@ -51,10 +52,13 @@ void send_message(int* socket_fd_pointer)		//read input into different buffers, 
 	memcpy(send.data + send.length, message.data, message.length);
 	send.length += message.length;
 
-	printf("SENDING: %s %d\n", send.data, send.length);
 	convert_string(&send);
 
-	send_string(&send, *socket_fd_pointer);
+	return_codes = send_string(&send, *socket_fd_pointer);
+	if(return_codes.error_occured)
+	{
+		printf("Fehler beim senden der Nachricht aufgetreten: %s\n", strerror(return_codes.error_code));
+	}
 
 	free(send.data);
 
