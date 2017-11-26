@@ -35,7 +35,7 @@ void* interface_thread_func(void* arg)
 
 static void get_input()
 {
-	struct string user_input = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH};
+	struct string user_input = new_string(DEFAULT_BUFFER_LENGTH);
 	struct string bye = { .data = "\x00\x05/bye\0", .length = 7, .capacity = 7};
 	struct pollfd stdin_ready = { .fd = fileno(stdin), .events = POLLIN, .revents = 0};
 	bool stdin_has_data_left = false;

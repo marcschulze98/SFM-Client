@@ -19,9 +19,9 @@ void* write_thread_func(void* arg)
 void send_message(int* socket_fd_pointer)		//read input into different buffers, concatenate them afterwards TODO: maybe rewrite all into one buffer?
 {
 
-	struct string servername = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH};
-	struct string username = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH};
-	struct string message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH};
+	struct string servername = new_string(DEFAULT_NAME_LENGTH);
+	struct string username = new_string(DEFAULT_NAME_LENGTH);
+	struct string message = new_string(DEFAULT_NAME_LENGTH);
 	struct pollfd stdin_ready = { .fd = fileno(stdin), .events = POLLIN, .revents = 0};
 	struct return_info return_codes;
 
@@ -44,7 +44,7 @@ void send_message(int* socket_fd_pointer)		//read input into different buffers, 
 
 	uint32_t complete_length = servername.length + username.length + message.length;
 
-	struct string send = { .data = malloc(complete_length+3), .length = 0, .capacity = complete_length};
+	struct string send = new_string(complete_length);
 	memcpy(send.data + send.length, servername.data, servername.length);
 	send.length += servername.length;
 	memcpy(send.data + send.length, username.data, username.length);
@@ -92,6 +92,5 @@ void read_input(struct string* input, struct pollfd* stdin_ready, char insert_af
 
 	realloc_write(input, insert_after, input->length);
 	input->length++;
-
 }
 

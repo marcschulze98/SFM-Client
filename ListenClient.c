@@ -6,7 +6,7 @@ static void copy_until_delimiter_offset(struct string* restrict source, struct s
 
 void* listen_thread_func(void*  arg)
 {
-	struct string message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH };
+	struct string message = new_string(DEFAULT_BUFFER_LENGTH);
 	struct return_info return_codes;
 	sigset_t   signal_mask;
 	sigemptyset (&signal_mask);
@@ -37,10 +37,10 @@ static void print_formatted_message(struct string* message) //print message in a
 	uint32_t group_offset;
 	bool contains_group = false;
 
-	struct string servername = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH };
-	struct string username = { .data = malloc(DEFAULT_NAME_LENGTH), .length = 0, .capacity = DEFAULT_NAME_LENGTH };
+	struct string servername = new_string(DEFAULT_NAME_LENGTH);
+	struct string username = new_string(DEFAULT_NAME_LENGTH);
 	char* timestamp = malloc(200);
-	struct string temp_message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH };
+	struct string temp_message = new_string(DEFAULT_NAME_LENGTH);
 	message->length = 0;
 
 	message->length += 8;		//8 bits of time
