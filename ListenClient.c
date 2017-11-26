@@ -7,6 +7,7 @@ static void copy_until_delimiter_offset(struct string* restrict source, struct s
 void* listen_thread_func(void*  arg)
 {
 	struct string message = { .data = malloc(DEFAULT_BUFFER_LENGTH), .length = 0, .capacity = DEFAULT_BUFFER_LENGTH };
+	struct return_info return_codes;
 	sigset_t   signal_mask;
 	sigemptyset (&signal_mask);
     sigaddset (&signal_mask, SIGINT);
@@ -15,7 +16,8 @@ void* listen_thread_func(void*  arg)
 	int socket_fd = *(int*)arg;
 
 get_message:
-	if(!get_message(&message, socket_fd))
+	return_codes = get_message(&message, socket_fd);
+	if(!return_codes.return_code)
 	{
 		printf("Keine Nachrichten verfügbar\n");
 		fflush(stdout);

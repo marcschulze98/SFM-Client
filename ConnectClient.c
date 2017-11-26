@@ -127,6 +127,7 @@ static int* init_connection(struct string* home_server)
 	struct addrinfo hints;
 	struct addrinfo *res;  				// will point to the results of getaddrinfo()
 
+
 	memset(&hints, 0, sizeof hints);	// make sure the struct is empty
 	hints.ai_family = AF_INET;     		// don't care IPv4 or IPv6
 	hints.ai_socktype = SOCK_STREAM; 	// TCP stream sockets
