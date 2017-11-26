@@ -89,7 +89,6 @@ int main (int argc, char **argv)
 
 	pthread_join(interface_thread, NULL);
 	free(socket_fd_pointer); //free socket pointer *after* threads are done
-
 	return 0;
 }
 
