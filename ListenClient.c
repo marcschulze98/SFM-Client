@@ -13,10 +13,10 @@ void* listen_thread_func(void*  arg)
     sigaddset (&signal_mask, SIGINT);
     pthread_sigmask (SIG_BLOCK, &signal_mask, NULL); //block SIGINT
 
-	int socket_fd = *(int*)arg;
+	int* socket_fd_pointer = (int*)arg;
 
 get_message:
-	return_codes = get_message(&message, socket_fd);
+	return_codes = get_message(&message, *socket_fd_pointer);
 	if(!return_codes.return_code)
 	{
 		printf("Keine Nachrichten verfügbar\n");

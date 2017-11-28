@@ -7,6 +7,12 @@ void* listen_thread_func(void* arg);
 void* write_thread_func(void* arg);
 void* interface_thread_func(void* arg);
 
+struct write_argument
+{
+	bool message;
+	int socket_fd;
+};
+
 
 extern _Atomic volatile sig_atomic_t interrupted;
 extern _Atomic bool job_running;

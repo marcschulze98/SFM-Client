@@ -94,6 +94,10 @@ static void print_help(void)		//availabe commands etc.
 
 static void handle_interface_command(char* command) //do action according to input
 {
+	struct write_argument* arg_struct = malloc(sizeof(*arg_struct));
+	arg_struct->message = true;
+	arg_struct->socket_fd = *socket_fd_pointer;
+
 	if(strncmp(command, "help", strlen("help")) == 0)
 	{
 		print_help();
@@ -102,7 +106,11 @@ static void handle_interface_command(char* command) //do action according to inp
 	} else if(strncmp(command, "logout", strlen("logout")) == 0) {
 		interrupted = 1;
 	} else if((strncmp(command, "send", strlen("send")) == 0) && (read_write == '1' || read_write == '2')) {
-		pthread_create(&write_thread, NULL, write_thread_func, socket_fd_pointer);
+		pthread_create(&write_thread, NULL, write_thread_func, arg_struct);
+		pthread_join(write_thread, NULL);
+	} else if((strncmp(command, "cmd", strlen("cmd")) == 0) && (read_write == '1' || read_write == '2')) {
+		arg_struct->message = false;
+		pthread_create(&write_thread, NULL, write_thread_func, arg_struct);
 		pthread_join(write_thread, NULL);
 	} else if((strncmp(command, "get", strlen("get")) == 0) && (read_write == '1' || read_write == '3')) {
 		pthread_create(&listen_thread, NULL, listen_thread_func, socket_fd_pointer);
