@@ -22,7 +22,7 @@ void* interface_thread_func(void* arg)
 	socket_fd_pointer = arg;
 
 	print_welcome_message();
-	if((read_write == '1' || read_write == '3')) //get messages at beginning (probably motd too)
+	if((read_write == '1' || read_write == '3')) //get messages at beginning (probably motd)
 	{
 		pthread_create(&listen_thread, NULL, listen_thread_func, socket_fd_pointer);
 		pthread_join(listen_thread, NULL);

@@ -116,6 +116,7 @@ static struct string* read_input(void)		//allocate some space and read byte by b
 
 static void sigint_handler(int signum) //set global vaiable for reading, instead of crashing the application
 {
+	signal(SIGINT, sigint_handler);
 	interrupted = 1;
 }
 

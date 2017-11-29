@@ -71,6 +71,11 @@ static void send_message(int socket_fd)		//read input into different buffers, co
 	free(send.data);
 
 cleanup:
+	if(interrupted)
+	{
+		interrupted = false;
+		printf("\n");
+	}
 	free(servername.data);
 	free(username.data);
 	free(message.data);
@@ -100,6 +105,11 @@ static void send_cmd(int socket_fd)
 	}
 
 cleanup:
+	if(interrupted)
+	{
+		interrupted = false;
+		printf("\n");
+	}
 	free(cmd.data);
 }
 
