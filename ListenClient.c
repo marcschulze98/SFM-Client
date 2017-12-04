@@ -64,9 +64,8 @@ static void print_formatted_message(struct string* message) //print message in a
 	printf("\n\tVon: %s@%s\n", servername.data, username.data);
 
 	if(contains_group)
-	{
 		printf("\t Gruppe: %s\n", username.data+group_offset+1);
-	}
+
 	printf("\tGesendet am: %s\n", timestamp);
 	printf("\tNachricht:\n%s\n\n", temp_message.data);
 
@@ -80,9 +79,8 @@ static void copy_until_delimiter_offset(struct string* restrict source, struct s
 {
 	uint32_t offset_target;
 	for(offset_target = 0; source->data[source->length] != delimiter; offset_target++, source->length++) 	//go through source and copy the chars from offset_source
-	{																									//until the delimiter to the target
-		realloc_write(target, source->data[source->length], offset_target);
-	}
+		realloc_write(target, source->data[source->length], offset_target);									//until the delimiter to the target
+
 	source->length++;
 	target->data[offset_target] = '\0';											//skip delimiter so you can call this function directly again, and nul-terminate string
 }
@@ -90,17 +88,14 @@ static void copy_until_delimiter_offset(struct string* restrict source, struct s
 static bool handle_server_command(char* const command) //returns true and handles command if it was a command, otherwise returns false
 {
 	if(command[0] != '/')
-	{
 		return false;
-	} else if(strncmp(command+1, "motd", strlen("motd")) == 0) {
+	else if(strncmp(command+1, "motd", strlen("motd")) == 0)
 		printf("MOTD: %s\n", command+strlen("/motd "));
-	} else if(strncmp(command+1, "misc", strlen("misc")) == 0) {
+	else if(strncmp(command+1, "misc", strlen("misc")) == 0)
 		printf("Nachricht vom Server:\n%s\n\n", command+strlen("/misc "));
-	}
 
-	else{
+	else
 		printf("Unbekannter Befehl vom Server erhalten: %s\n", command);
-	}
 
 	fflush(stdout);
 	return true;

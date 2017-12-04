@@ -15,11 +15,9 @@ void* write_thread_func(void* arg)
 	int socket_fd = arg_struct->socket_fd;
 
 	if(arg_struct->message)
-	{
 		send_message(socket_fd);
-	} else {
+	else
 		send_cmd(socket_fd);
-	}
 
 	pthread_exit(0);
 }
@@ -64,9 +62,7 @@ static void send_message(int socket_fd)		//read input into different buffers, co
 
 	return_codes = send_string(&send, socket_fd);
 	if(return_codes.error_occured)
-	{
 		printf("Fehler beim senden der Nachricht aufgetreten: %s\n", strerror(return_codes.error_code));
-	}
 
 	free(send.data);
 
@@ -100,9 +96,7 @@ static void send_cmd(int socket_fd)
 
 	return_codes = send_string(&cmd, socket_fd);
 	if(return_codes.error_occured)
-	{
 		printf("Fehler beim senden der Nachricht aufgetreten: %s\n", strerror(return_codes.error_code));
-	}
 
 cleanup:
 	if(interrupted)
@@ -124,9 +118,7 @@ static void read_input(struct string* input, struct pollfd* stdin_ready, char in
 		{
 			stdin_has_data_left = true;
 			if((current_char = getchar()) == '\n' || current_char == EOF)
-			{
 				break;
-			}
 			realloc_write(input, (char)current_char, input->length);
 			input->length++;
 

@@ -127,13 +127,13 @@ static int* init_connection(struct string* home_server)
 	struct addrinfo hints;
 	struct addrinfo *res;  				// will point to the results of getaddrinfo()
 
-
 	memset(&hints, 0, sizeof hints);	// make sure the struct is empty
 	hints.ai_family = AF_INET;     		// don't care IPv4 or IPv6
 	hints.ai_socktype = SOCK_STREAM; 	// TCP stream sockets
+
 	if ((status = getaddrinfo(home_server->data+2, "2000", &hints, &res)) != 0) //get ip from hostname
 	{
-		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
+		printf("getaddrinfo error: %s\n", gai_strerror(status));
 		exit(1);
 	}
 
@@ -141,17 +141,14 @@ static int* init_connection(struct string* home_server)
 	{
 		printf ("Socket konnte nicht angelegt werden: %s\n", strerror(errno));
 		exit(1);
-	} else {
-		//~ printf ("\nSocket wurde angelegt %d\n", *socket_fd_pointer);
 	}
 
-	if(connect(*socket_fd_pointer, res->ai_addr, res->ai_addrlen) != 0)		//connect to server
+	if(connect(*socket_fd_pointer, res->ai_addr, res->ai_addrlen) == -1)		//connect to server
 	{
 		printf ("Verbindung mit dem Master-Server konnte nicht hergestellt werden: %s\n", strerror(errno));
-		exit(2);
-	} else {
-		//~ printf ("Verbindung mit dem Server (%s) hergestellt\n", inet_ntoa (address.sin_addr));
+		exit(1);
 	}
+
 	freeaddrinfo(res);
 
 	return socket_fd_pointer;
