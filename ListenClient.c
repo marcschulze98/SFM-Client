@@ -17,14 +17,20 @@ void* listen_thread_func(void*  arg)
 
 get_message:
 	return_codes = get_message(&message, *socket_fd_pointer);
-	if(!return_codes.return_code)
+	if(!return_codes.error_occured)
 	{
-		printf("Keine Nachrichten verfügbar\n");
-		fflush(stdout);
-	} else if(message.data[0] == '\0') {
-		goto get_message;
-	} else if(!handle_server_command(message.data)) {  //check if message was a command, otherwise its a message
-		print_formatted_message(&message);
+		if(!return_codes.return_code)
+		{
+			printf("Keine Nachrichten verfügbar\n");
+			fflush(stdout);
+		} else if(message.data[0] == '\0') {
+			goto get_message;
+		} else if(!handle_server_command(message.data)) {  //check if message was a command, otherwise its a message
+			print_formatted_message(&message);
+			fflush(stdout);
+		}
+	} else {
+		printf("Fehler beim holen der Nachrichten\n");
 		fflush(stdout);
 	}
 

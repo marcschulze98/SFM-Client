@@ -122,6 +122,7 @@ static void handle_interface_command(char* command) //do action according to inp
 		printf("Befehl \"%s\" unbekannt oder nicht verfügbar\n", command);
 	}
 
+	free(arg_struct);
 	fflush(stdout);
 
 }
