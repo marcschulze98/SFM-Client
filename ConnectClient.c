@@ -18,6 +18,7 @@ int main (int argc, char **argv)
 	struct string* username;
 	struct string* password;
 	struct string* home_server;
+	struct string answer = new_string(2);
 	pthread_t interface_thread;
 	int* socket_fd_pointer;
 
@@ -76,6 +77,14 @@ int main (int argc, char **argv)
 	send_string(username, *socket_fd_pointer);
 	send_string(password, *socket_fd_pointer);
 
+	get_message(&answer, *socket_fd_pointer);
+
+	if(answer.length != 2 || answer.data[0] == '0')
+	{
+		printf("Anmeldung abgwiesen vom Server (Falscher Benutzername oder Passwort?)\n");
+		exit(1);
+	}
+
 	signal(SIGINT, sigint_handler);
 	pthread_create(&interface_thread, NULL, interface_thread_func, socket_fd_pointer); //start interface thread
 
@@ -86,6 +95,7 @@ int main (int argc, char **argv)
 	free(username);
 	free(home_server->data);
 	free(home_server);
+	free(answer.data);
 
 	pthread_join(interface_thread, NULL);
 	free(socket_fd_pointer); //free socket pointer *after* threads are done

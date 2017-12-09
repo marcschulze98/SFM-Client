@@ -30,7 +30,7 @@ get_message:
 			fflush(stdout);
 		}
 	} else {
-		printf("Fehler beim holen der Nachrichten\n");
+		printf("Fehler beim holen der Nachrichten: %s\n", strerror(return_codes.error_code));
 		fflush(stdout);
 	}
 
