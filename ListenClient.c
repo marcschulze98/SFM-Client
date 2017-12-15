@@ -3,6 +3,7 @@
 static void print_formatted_message(struct string* message);
 static bool handle_server_command(char* const command);
 static void copy_until_delimiter_offset(struct string* restrict source, struct string* restrict target,char delimiter);
+static void handle_status(char* status_cmd);
 
 void* listen_thread_func(void*  arg)
 {
@@ -99,11 +100,76 @@ static bool handle_server_command(char* const command) //returns true and handle
 		printf("MOTD: %s\n", command+strlen("/motd "));
 	else if(strncmp(command+1, "misc", strlen("misc")) == 0)
 		printf("Nachricht vom Server:\n%s\n\n", command+strlen("/misc "));
+	else if(strncmp(command+1, "status", strlen("status")) == 0)
+		handle_status(command+1+strlen("status"));
 
 	else
 		printf("Unbekannter Befehl vom Server erhalten: %s\n", command);
 
 	fflush(stdout);
 	return true;
+}
+
+static void handle_status(char* status_cmd)
+{
+	if(strlen(status_cmd) == 0)
+		return;
+
+	if(strncmp(status_cmd+1, "groups", strlen("groups")) == 0)
+	{
+		char* output = malloc(strlen(status_cmd+1+strlen("groups")+1));
+		char* iterate = status_cmd+1+strlen("groups")+1;
+		int offset;
+		printf("Es gibt folgende Gruppen auf dem momentanen Server:\n");
+
+		while (sscanf(iterate, "%[^',']%n", output, &offset) == 2)
+		{
+			iterate += offset;
+			printf("%s\n", output);
+		}
+
+		if(sscanf(iterate, "%s", output) == 1)
+		{
+			printf("%s\n", output);
+		}
+		free(output);
+	} else if(strncmp(status_cmd+1, "groupmembers", strlen("groupmembers")) == 0) {
+		char* output = malloc(strlen(status_cmd+1+strlen("groupmembers")+1));
+		char* iterate = status_cmd+1+strlen("groupmembers")+1;
+		int offset;
+
+		if(sscanf(iterate, "%s%n", output, &offset) == 1)
+		{
+			iterate += offset;
+			printf("Folgende Mitglieder sind in der Gruppe %s:\n", output);
+		}
+
+		while(sscanf(iterate, "%[^',']%n", output, &offset) == 1)
+		{
+			iterate += offset;
+			printf("%s\n", output);
+		}
+
+		if(sscanf(iterate, "%s", output) == 1)
+		{
+			printf("%s\n", output);
+		}
+		free(output);
+	} else if(strncmp(status_cmd+1, "nogroup", strlen("nogroup")) == 0) {
+		char* output = malloc(strlen(status_cmd+1+strlen("nogroup")+1));
+		char* iterate = status_cmd+1+strlen("nogroup")+1;
+		int offset;
+
+		printf("Auf diesem Server gibt es keine Gruppe namens ");
+		while(sscanf(iterate, "%s%n", output, &offset) != EOF)
+		{
+			iterate += offset;
+			printf("%s ", output);
+		}
+
+		printf("\n");
+		free(output);
+	}
+
 }
 
